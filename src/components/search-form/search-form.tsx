@@ -13,6 +13,7 @@ type P = {
 
 export function SearchForm({ setItems }: P): JSX.Element {
   const [errs, setErrors] = useState<string[]>([]),
+    [loading, setLoading] = useState(false),
     form = useForm<SearchInput>({
       resolver: valibotResolver(SearchInputSchema),
       defaultValues: {
@@ -22,7 +23,8 @@ export function SearchForm({ setItems }: P): JSX.Element {
     onSubmit: SubmitHandler<SearchInput> = async (v) => {
       try {
         setErrors([]);
-        const res = await fetch('/api/search', {
+        setLoading(true);
+        const res = await fetch(`/api/search?q=${v.text}`, {
           mode: 'cors',
         });
         if (res.status >= 400) {
@@ -31,10 +33,13 @@ export function SearchForm({ setItems }: P): JSX.Element {
         const body = await res.json();
         if (!!body.errors.length) {
           setErrors(body.errors);
+          setLoading(false);
           return;
         }
         setItems(body.items);
+        setLoading(false);
       } catch (e) {
+        setLoading(false);
         if (e instanceof Error) {
           setErrors([e.message]);
         } else {
@@ -63,7 +68,9 @@ export function SearchForm({ setItems }: P): JSX.Element {
           }}
         ></FormField>
         <div className={`flex flex-row-reverse`}>
-          <Button className={`my-4`}>検索</Button>
+          <Button disabled={loading} className={`my-4`}>
+            検索
+          </Button>
         </div>
       </form>
       <ul>
