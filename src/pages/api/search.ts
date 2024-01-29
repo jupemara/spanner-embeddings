@@ -17,10 +17,11 @@ export default async function searchHandler(
     if (!q?.length) {
       throw new Error('なんか入れてください');
     }
-    await textToEmbeddings(q.toString() ?? '');
+    const embeddings = await textToEmbeddings(q.toString() ?? '');
+    console.log(JSON.stringify(embeddings, null, 2));
     res.status(200).json({
       items: data.sort((a, b) => {
-        return a.distance - b.distance;
+        return b.distance - a.distance;
       }),
       errors: [],
     });

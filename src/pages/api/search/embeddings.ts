@@ -1,6 +1,8 @@
 import * as aiplatform from '@google-cloud/aiplatform';
 import { config } from '../config';
 
+export type Embeddings = (number | null | undefined)[];
+
 const PUBLISHER = 'google',
   MODEL = 'textembedding-gecko@001',
   { helpers } = aiplatform,
@@ -8,7 +10,7 @@ const PUBLISHER = 'google',
     apiEndpoint: 'us-central1-aiplatform.googleapis.com',
   });
 
-export async function textToEmbeddings(raw: string): Promise<any> {
+export async function textToEmbeddings(raw: string): Promise<Embeddings> {
   const instance = helpers.toValue({
     content: raw,
   });
@@ -25,5 +27,62 @@ export async function textToEmbeddings(raw: string): Promise<any> {
       topK: 1,
     }),
   });
-  console.log(JSON.stringify(res, null, 2));
+  if (!res.predictions || !res.predictions[0]) {
+    throw new Error(`prediction result is undefined`);
+  }
+  /*
+  predictions result is like this
+  {
+    "predictions": [{
+      "structValue": {
+        "fields": {
+          "embeddings": {
+            "structValue": {
+              "fields": {
+                "statistics": {
+                  "structValue": {
+                    "fields": {
+                      "truncated": {
+                        "boolValue": false,
+                        "kind": "boolValue"
+                      },
+                      "token_count": {
+                        "numberValue": 5,
+                        "kind": "numberValue"
+                      }
+                    }
+                  },
+                  "kind": "structValue"
+                },
+                "values": {
+                  "listValue": {
+                    "values": [
+                      {
+                        "numberValue": -0.0262629222124815,
+                        "kind": "numberValue"
+                      },
+                      {
+                        "numberValue": -0.017303472384810448,
+                        "kind": "numberValue"
+                      }
+                    ]
+                  }
+                }
+              }
+            }
+          }
+        }
+      }
+    }]
+  }
+  */
+  const vs =
+    res.predictions[0]?.structValue?.fields?.embeddings?.structValue?.fields
+      ?.values?.listValue?.values;
+  if (!vs) {
+    throw new Error(`predictions[*].embeddings is undefined`);
+  }
+  return vs.map((v) => {
+    return v.numberValue;
+  });
 }
