@@ -4,12 +4,15 @@ import { Input } from '../ui/input';
 import { SearchInput, SearchInputSchema } from './schema';
 import { valibotResolver } from '@hookform/resolvers/valibot';
 import { Button } from '../ui/button';
-import { useState } from 'react';
+import { Dispatch, SetStateAction, useState } from 'react';
 import { item } from '@/pages/api/schema';
 
-export function SearchForm(): JSX.Element {
-  const [items, setItems] = useState<item[]>([]),
-    [errs, setErrors] = useState<string[]>([]),
+type P = {
+  setItems: Dispatch<SetStateAction<item[]>>;
+};
+
+export function SearchForm({ setItems }: P): JSX.Element {
+  const [errs, setErrors] = useState<string[]>([]),
     form = useForm<SearchInput>({
       resolver: valibotResolver(SearchInputSchema),
       defaultValues: {
