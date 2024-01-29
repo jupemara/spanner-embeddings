@@ -14,12 +14,10 @@ export default function Home() {
     >
       <div>
         <h1>Spanner に保存された Embeddings を使って検索できるやつ</h1>
-        <div className={`w-full md:my-8 my-4`}>
+        <div className={`w-full md:mt-8 mt-4`}>
           <SearchForm setItems={setItems} />
         </div>
-        <div>
-          <Items items={items} />
-        </div>
+        <Items items={items} />
       </div>
     </main>
   );
