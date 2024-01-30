@@ -4,13 +4,48 @@ import { Input } from '../ui/input';
 import { SearchInput, SearchInputSchema } from './schema';
 import { valibotResolver } from '@hookform/resolvers/valibot';
 import { Button } from '../ui/button';
+import { Dispatch, SetStateAction, useState } from 'react';
+import { item } from '@/pages/api/schema';
 
-export function SearchForm(): JSX.Element {
-  const form = useForm<SearchInput>({
+type P = {
+  setItems: Dispatch<SetStateAction<item[]>>;
+};
+
+export function SearchForm({ setItems }: P): JSX.Element {
+  const [errs, setErrors] = useState<string[]>([]),
+    [loading, setLoading] = useState(false),
+    form = useForm<SearchInput>({
       resolver: valibotResolver(SearchInputSchema),
+      defaultValues: {
+        text: '',
+      },
     }),
-    onSubmit: SubmitHandler<SearchInput> = (v) => {
-      console.log(v);
+    onSubmit: SubmitHandler<SearchInput> = async (v) => {
+      try {
+        setErrors([]);
+        setLoading(true);
+        const res = await fetch(`/api/search?q=${v.text}`, {
+          mode: 'cors',
+        });
+        if (res.status >= 400) {
+          throw new Error(`backend APIs returns ${res.status}`);
+        }
+        const body = await res.json();
+        if (!!body.errors.length) {
+          setErrors(body.errors);
+          setLoading(false);
+          return;
+        }
+        setItems(body.items);
+        setLoading(false);
+      } catch (e) {
+        setLoading(false);
+        if (e instanceof Error) {
+          setErrors([e.message]);
+        } else {
+          setErrors(['エラーが起こりました']);
+        }
+      }
     };
   return (
     <Form {...form}>
@@ -33,9 +68,20 @@ export function SearchForm(): JSX.Element {
           }}
         ></FormField>
         <div className={`flex flex-row-reverse`}>
-          <Button className={`my-4`}>検索</Button>
+          <Button disabled={loading} className={`my-4`}>
+            検索
+          </Button>
         </div>
       </form>
+      <ul>
+        {errs.map((v, i) => {
+          return (
+            <li key={i} className={`text-red-400`}>
+              {v}
+            </li>
+          );
+        })}
+      </ul>
     </Form>
   );
 }
