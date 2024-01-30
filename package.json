@@ -1,12 +1,14 @@
 {
-  "name": "my-app",
+  "name": "spanner-embeddings",
+  "author": "jupemara",
   "version": "0.1.0",
   "private": true,
   "scripts": {
     "dev": "next dev",
     "build": "next build",
     "start": "next start",
-    "lint": "next lint"
+    "lint": "next lint",
+    "deploy": "scripts/deploy.sh"
   },
   "dependencies": {
     "class-variance-authority": "^0.7.0",
