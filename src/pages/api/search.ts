@@ -1,7 +1,7 @@
 import { NextApiRequest, NextApiResponse } from 'next';
 import { item } from './schema';
-import { data } from './sample-search-data';
 import { textToEmbeddings } from './search/embeddings';
+import { listItemsByDistance } from './search/spanner';
 
 interface payload {
   items: item[];
@@ -17,11 +17,11 @@ export default async function searchHandler(
     if (!q?.length) {
       throw new Error('なんか入れてください');
     }
-    const embeddings = await textToEmbeddings(q.toString() ?? '');
-    console.log(JSON.stringify(embeddings, null, 2));
+    const embeddings = await textToEmbeddings(q.toString() ?? ''),
+      items = await listItemsByDistance(embeddings);
     res.status(200).json({
-      items: data.sort((a, b) => {
-        return b.distance - a.distance;
+      items: items.sort((a, b) => {
+        return a.distance - b.distance;
       }),
       errors: [],
     });
