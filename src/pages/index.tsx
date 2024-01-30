@@ -3,6 +3,7 @@ import { Inter } from 'next/font/google';
 import { useState } from 'react';
 import { item } from './api/schema';
 import { Items } from '@/components/items';
+import { GithubIcon } from '@/components/github-icon/github-icon';
 
 const inter = Inter({ subsets: ['latin'] });
 
@@ -21,15 +22,15 @@ export default function Home() {
         </div>
         <div>
           <h2 className={`mt-2 flex justify-center items-center`}>
-            参考リンクs
+            参考リンク
           </h2>
-          <ul className={`list-disc mt-2 ml-4`}>
+          <ul className={`list-disc my-2 ml-4`}>
             <li>
               <div>
                 <GithubIcon />
                 <a
                   href="https://github.com/jupemara/spanner-embeddings"
-                  className={`underline vertical-bottom ml-1`}
+                  className={`underline ml-1`}
                 >
                   jupemara/spanner-embeddings
                 </a>
