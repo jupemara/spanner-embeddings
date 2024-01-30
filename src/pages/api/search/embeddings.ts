@@ -4,7 +4,7 @@ import { config } from '../config';
 export type Embeddings = (number | null | undefined)[];
 
 const PUBLISHER = 'google',
-  MODEL = 'textembedding-gecko@001',
+  MODEL = 'textembedding-gecko-multilingual@001',
   { helpers } = aiplatform,
   client = new aiplatform.v1.PredictionServiceClient({
     apiEndpoint: 'us-central1-aiplatform.googleapis.com',
