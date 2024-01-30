@@ -67,10 +67,12 @@ export function SearchForm({ setItems }: P): JSX.Element {
             );
           }}
         ></FormField>
-        <div className={`flex flex-row-reverse`}>
-          <Button disabled={loading} className={`my-4`}>
-            検索
-          </Button>
+        <div className={`flex justify-start`}>
+          <div className={`ml-auto`}>
+            <Button disabled={loading} className={`my-4`}>
+              検索
+            </Button>
+          </div>
         </div>
       </form>
       <ul>
