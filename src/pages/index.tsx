@@ -13,7 +13,9 @@ export default function Home() {
       className={`flex justify-center min-h-screen md:p-12 p-8  ${inter.className}`}
     >
       <div>
-        <h1>Spanner に保存された Embeddings を使って検索できるやつ</h1>
+        <h1 className={`flex justify-center items-center`}>
+          Spanner に保存された Embeddings を使って検索できるやつ
+        </h1>
         <div className={`w-full md:mt-8 mt-4`}>
           <SearchForm setItems={setItems} />
         </div>

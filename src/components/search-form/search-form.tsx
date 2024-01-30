@@ -59,7 +59,7 @@ export function SearchForm({ setItems }: P): JSX.Element {
                 <FormControl>
                   <Input
                     className={``}
-                    placeholder="彼女のプレゼント, 赤いマグカップ"
+                    placeholder="ガジェット, おもちゃ, お菓子, 果物"
                     {...field}
                   />
                 </FormControl>
