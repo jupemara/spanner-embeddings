@@ -6,6 +6,7 @@ import { valibotResolver } from '@hookform/resolvers/valibot';
 import { Button } from '../ui/button';
 import { Dispatch, SetStateAction, useState } from 'react';
 import { item } from '@/pages/api/schema';
+import { GithubIcon } from '../github-icon/github-icon';
 
 type P = {
   setItems: Dispatch<SetStateAction<item[]>>;
